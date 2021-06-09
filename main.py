@@ -24,6 +24,24 @@ class Loader:
             cls.saveMovieToDb(movie)
 
     @classmethod
+    def getNewMovies(cls):
+        content = requests.get("https://turflix.com/filmler/-/-/date/any",
+                               headers={"User-Agent": "XY"}).content
+        soup = BeautifulSoup(content,'html.parser')
+        data = soup.find_all("a", attrs={"class": "item-init"})
+
+        for i in data:
+            movie = {
+                "id": i.get("href")[(i.get("href").rfind('-') + 1):],
+                "Name": i.get("data-title"),
+                "endDate": None,
+                "webLink": "https://turflix.com" + i.get("href")
+            }
+
+            cls.saveMovieToDb(movie)
+
+
+    @classmethod
     def saveMovieToDb(cls, movie: dict):
         if len(dbSelect("Select * from Movies where id = %s", (movie["id"],))) == 0:
             content = requests.get(movie["webLink"], headers={"User-Agent": "XY"}).content
@@ -133,4 +151,5 @@ class Cursor:
 
 
 sys.setrecursionlimit(10000)
+#: Sample
 Loader.getMoviesWillDelete()
