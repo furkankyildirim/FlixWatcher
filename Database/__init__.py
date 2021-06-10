@@ -2,14 +2,14 @@
 import mysql.connector
 from configparser import ConfigParser
 
-
 #: Get Configs
 config = ConfigParser()
-config.read("config.ini")
+config.read("./config.ini")
 
-#: Create the connection
+#: Create the database connection
 mydb = mysql.connector.connect(user=config["Database"]["user"], password=config["Database"]["pass"],
-                               host=config["Database"]["host"], database=config["Database"]["db"])
+                               host=config["Database"]["host"], port=int(config["Database"]["port"]),
+                               database=config["Database"]["db"], auth_plugin='mysql_native_password')
 
 #: Create the cursor
 mycursor = mydb.cursor()
@@ -43,8 +43,8 @@ def dbExecute(sql: str, params: tuple):
 def dbSelect(sql: str, params: tuple):
     cursor = mydb.cursor()
     cursor.execute(sql, params)
-    myresult = cursor.fetchall()
+    result = cursor.fetchall()
     cursor.close()
 
-    return myresult
+    return result
 

@@ -1,4 +1,4 @@
-from dbConnection import dbSelect, dbExecute
+from Database import dbSelect, dbExecute
 from bs4 import BeautifulSoup
 import requests
 import json
@@ -27,7 +27,7 @@ class Loader:
     def getNewMovies(cls):
         content = requests.get("https://turflix.com/filmler/-/-/date/any",
                                headers={"User-Agent": "XY"}).content
-        soup = BeautifulSoup(content,'html.parser')
+        soup = BeautifulSoup(content, 'html.parser')
         data = soup.find_all("a", attrs={"class": "item-init"})
 
         for i in data:
@@ -39,7 +39,6 @@ class Loader:
             }
 
             cls.saveMovieToDb(movie)
-
 
     @classmethod
     def saveMovieToDb(cls, movie: dict):
@@ -70,7 +69,7 @@ class Loader:
             movie["Genres"] = ", ".join([n for n in genres])
             movie["Duration"] = soup.find("span", attrs={"class": "sub"}).text.split(" ")[2]
             temp = soup.find("h1").text
-            movie["Year"] = temp[(temp.find("(")+1):temp.find(")")]
+            movie["Year"] = temp[(temp.find("(") + 1):temp.find(")")]
 
             print(movie)
             movie["Image"] = requests.get(data["image"]).content
@@ -117,7 +116,7 @@ class Loader:
             dbExecute(query, tuple(list(person.values())))
             content = requests.get(person["webLink"], headers={"User-Agent": "XY"}).content
             soup = BeautifulSoup(content, 'html.parser')
-            movies = soup.find_all("a",attrs={"class": "item-init item"})
+            movies = soup.find_all("a", attrs={"class": "item-init item"})
 
             for i in movies:
                 movie = {
@@ -138,18 +137,20 @@ class Loader:
 
 
 class Cursor:
-    def __init__(self):
-        pass
 
-    def getAllMovies(self) -> list:
+    @classmethod
+    def getAllMovies(cls) -> list:
         sql = "Select * from Movies;"
         return dbSelect(sql, ())
 
-    def getMovies(self, query: str, params: str) -> list:
+    @classmethod
+    def getMovies(cls, query: str, params: str) -> list:
         query = "Select * from Movies where {} = %s;".format(query)
         return dbSelect(query, (params,))
+
 
 
 sys.setrecursionlimit(10000)
 #: Sample
 Loader.getMoviesWillDelete()
+
