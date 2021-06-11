@@ -113,7 +113,7 @@ class Loader:
                 for item in soup.select('a[href^="/p/"]'):
                     person = {"id": item.get("href")[(item.get("href").rfind('-') + 1):],
                             "webLink": params["url"] + item.get("href"),
-                            "Movies": json.dumps([movie["id"]]),
+                            "Movies": json.dumps([movie["id"]]), "Location": params["code"],
                             "Name": item.get("href")[item.get("href").find("p/") + 2:item.get("href").rfind('-')]
                             }
 
@@ -124,21 +124,6 @@ class Loader:
             elif movie["endDate"] is not None:
                 dbExecute("Update Movies set endDate = %s where id = %s and Location = %s", (movie["endDate"], movie["id"], movie["Location"]))
 
-            else:
-                content = requests.get(movie["webLink"], headers={"User-Agent": "XY"}).content
-                soup = BeautifulSoup(content, 'html.parser')
-
-                for item in soup.select('a[href^="/p/"]'):
-                    person = {"id": item.get("href")[(item.get("href").rfind('-') + 1):],
-                            "webLink": params["url"] + item.get("href"),
-                            "Movies": json.dumps([movie["id"]]),
-                            "Name": item.get("href")[item.get("href").find("p/") + 2:item.get("href").rfind('-')]
-                            }
-
-                    person["netflixLink"] = "https://www.netflix.com/browse/m/person/" + str(person["id"])
-                    person["Name"] = person["Name"].replace("-", " ").title()
-                    cls.savePersonToDb(person, params["code"])
-                    
         except:
             pass
 
@@ -146,7 +131,7 @@ class Loader:
     def savePersonToDb(cls, person: dict, code: str):
         try:
             params = setParams(code)
-            selection = dbSelect("Select * from Persons where id = %s", (person["id"],))
+            selection = dbSelect("Select * from Persons where id = %s and Location = %s", (person["id"], params["code"]))
 
             if len(selection) == 0:
                 print(person)
@@ -174,7 +159,7 @@ class Loader:
                 if movie not in json.loads(selection[0][2]):
                     person["Movies"] = json.loads(selection[0][2])
                     person["Movies"].append(movie)
-                    dbExecute("Update Persons set Movies = %s where id = %s", (json.dumps(person["Movies"]), person["id"]))
+                    dbExecute("Update Persons set Movies = %s where id = %s and Location = %s", (json.dumps(person["Movies"]), person["id"], params["code"]))
                 print(person)
 
         except:

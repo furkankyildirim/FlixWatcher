@@ -72,7 +72,7 @@ class Connection:
     @staticmethod
     def __setPersonResponse(person: list) -> dict:
         #: Define response key
-        titles = ["id", "Name", "Movies", "webLink", "netflixLink"]
+        titles = ["id", "Name", "Movies", "webLink", "netflixLink", "Location"]
 
         #: Create response
         response = dict(zip(titles, person))
@@ -138,10 +138,10 @@ class Connection:
     @classmethod
     def getPersonById(cls, _id: str, cc: str) -> dict:
         #: Set Query
-        sql = "Select * from Persons where id = %s;"
+        sql = "Select * from Persons where id = %s and Location = %s;"
 
         #: Get Person from Db
-        person = dbSelect(sql, (_id,))
+        person = dbSelect(sql, (_id, cc))
 
         #: Check Person is exist by id
         if len(person) == 0: return {'type': 'error', 'output': 'no parameter is supplied'}
