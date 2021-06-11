@@ -99,3 +99,5 @@ you should execute:
 $ ALTER USER 'your_username'@'your_hostname' IDENTIFIED BY 'your_password' PASSWORD EXPIRE NEVER;
 $ ALTER USER 'your_username'@'your_hostname' IDENTIFIED WITH mysql_native_password BY 'your_password****';
 ```
+
+NOTE: The Loader file may give an error because the template of the websites from which the data is drawn may change in the future.

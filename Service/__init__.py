@@ -21,7 +21,8 @@ def index():
 # @completed
 @app.route('/api/v1/willdeleted')
 def willDeleted():
-    movies = Connection.willDeleted()
+    cc = request.args.get('cc', None)
+    movies = Connection.willDeleted(cc)
     return jsonify(movies)
 
 
@@ -40,9 +41,10 @@ def getAllMovies():
 @app.route('/api/v1/movie', methods=['GET'])
 def getMovie():
     _id = request.args.get('id', None)
+    cc = request.args.get('cc', None)
 
     if _id is not None:
-        movie = Connection.getMovie(_id)
+        movie = Connection.getMovie(_id, cc)
         return jsonify(movie)
     else:
         return jsonify({'type': 'error', 'output': 'no parameter is supplied'})
@@ -55,13 +57,14 @@ def getMovie():
 def getPerson():
     _id = request.args.get('id', None)
     movie = request.args.get('movie', None)
+    cc = request.args.get('cc', None)
 
     if _id is not None:
-        person = Connection.getPersonById(_id)
+        person = Connection.getPersonById(_id, cc)
         return jsonify(person)
 
     elif movie is not None:
-        person = Connection.getPersonsByMovieId(movie)
+        person = Connection.getPersonsByMovieId(movie, cc)
         return jsonify(person)
 
     else:

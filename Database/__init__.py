@@ -15,8 +15,8 @@ mydb = mysql.connector.connect(user=config["Database"]["user"], password=config[
 mycursor = mydb.cursor()
 
 #: Create table if not exists
-mycursor.execute("CREATE TABLE IF NOT EXISTS Movies (id BIGINT, Name TEXT, Description TEXT, Type TEXT, Year TEXT, Rating TEXT, Director TEXT, Genres TEXT, Image LONGBLOB, startDate TEXT, endDate TEXT, webLink TEXT, netflixLink TEXT, Duration TEXT);")
-mycursor.execute("CREATE TABLE IF NOT EXISTS Preview (id BIGINT, Name TEXT, Type TEXT, Year TEXT, Image LONGBLOB);")
+mycursor.execute("CREATE TABLE IF NOT EXISTS Movies (id BIGINT, Name TEXT, Description TEXT, Type TEXT, Year TEXT, Rating TEXT, Director TEXT, Genres TEXT, Image LONGBLOB, startDate TEXT, endDate TEXT, webLink TEXT, netflixLink TEXT, Duration TEXT, Location TEXT);")
+mycursor.execute("CREATE TABLE IF NOT EXISTS Preview (id BIGINT, Name TEXT, Type TEXT, Year TEXT, Image LONGBLOB, Location TEXT);")
 mycursor.execute("CREATE TABLE IF NOT EXISTS Persons (id BIGINT, Name TEXT, Movies JSON, webLink TEXT, netflixLink TEXT);")
 
 mycursor.close()
