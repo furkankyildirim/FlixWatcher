@@ -194,7 +194,7 @@ class Connection:
     @classmethod
     def getMoviePreview(cls, param: str, cc: str) -> dict:
         #: Set Query
-        query = "Select * from Preview where id = %s adn Location = %s;"
+        query = "Select * from Preview where id = %s and Location = %s;"
 
         #: Get Movie Preview from Db
         movie = dbSelect(query, (param, cc))
