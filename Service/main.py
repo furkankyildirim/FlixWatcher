@@ -214,26 +214,38 @@ class Connection:
     # @return, dict: The dictionary of matching item
     # @completed
     @classmethod
-    def willDeleted(cls, cc: str) -> list:
+    def willDeleted(cls, cc: str) -> dict:
         #: Set Query
-        query = "Select id from Movies where endDate >= %s and Location = %s order by endDate;"
+        query = "Select id, endDate from Movies where endDate >= %s and Location = %s order by endDate;"
 
         #: Set date
         today = date.today().strftime('%Y-%m-%d')
 
-        #: Get Movies Id from Db by Date
-        moviesId = dbSelect(query, (today, cc))
+        #: Get Movies Result from Db by Date
+        data = dbSelect(query, (today, cc))
 
-        #: Check Movies are exist by id
-        if len(moviesId) == 0: return [{'type': 'error', 'output': 'no parameter is supplied'}]
+        #: Check Movies are exist by endDate
+        if len(data) == 0: return {'type': 'error', 'output': 'no parameter is supplied'}
 
-        #: Set response
-        movies = []
+        #: Set movies Dict
+        movies = {}
 
         #: Get will be deleted movies by id
-        for i in range(len(moviesId)):
-            movie = cls.getMoviePreview(moviesId[i][0], cc)
-            movies.append(movie)
+        for i in range(len(data)):
+            movieId, endDate = data[i]
+            movie = cls.getMoviePreview(movieId, cc)
+
+            #: Edit movies result
+            if endDate not in movies:
+                movies[endDate] = [movie]
+            else:
+                movies[endDate].append(movie)
+
+        # Set outputs
+        output = {
+            "output": movies,
+            "type": "ok"
+        }
 
         #: Return Movies Preview
-        return movies
+        return output

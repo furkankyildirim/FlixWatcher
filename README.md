@@ -26,10 +26,11 @@ $ pip3 install -r requirements.txt
 ```
 
 ## Run
-### Run Loader
+### Run Loaders
+If you want to run Loader or Loader2:
 ```shell
 $ source venv/bin/activate
-$ python3 -m Loader
+$ python3 -m Loader #or python3 -m Loader
 ```
 When the program starts, it reflects the player and movie data taken from the website to the console. It also saves movie and player data to the database you specify in the config.ini file.
 
