@@ -1,4 +1,4 @@
-NUM_WORKERS=1
+NUM_WORKERS=3
 TIMEOUT=600
 
 exec gunicorn Service:app \

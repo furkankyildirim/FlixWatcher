@@ -32,7 +32,7 @@ def willDeleted():
 @app.route('/api/v1/allmovies', methods=['GET'])
 def getAllMovies():
     movies = Connection.getAllMovies()
-    return jsonify(movies)
+    return jsonify({"output": movies, "type": "ok"})
 
 
 # method: getMovie
@@ -45,7 +45,7 @@ def getMovie():
 
     if _id is not None:
         movie = Connection.getMovie(_id, cc)
-        return jsonify(movie)
+        return jsonify({"output": movie, "type": "ok"})
     else:
         return jsonify({'type': 'error', 'output': 'no parameter is supplied'})
 
@@ -61,11 +61,11 @@ def getPerson():
 
     if _id is not None:
         person = Connection.getPersonById(_id, cc)
-        return jsonify(person)
+        return jsonify({"output": person, "type": "ok"})
 
     elif movie is not None:
         person = Connection.getPersonsByMovieId(movie, cc)
-        return jsonify(person)
+        return jsonify({"output": person, "type": "ok"})
 
     else:
         return jsonify({'type': 'error', 'output': 'no parameter is supplied'})
