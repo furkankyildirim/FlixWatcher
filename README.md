@@ -36,14 +36,14 @@ When the program starts, it reflects the player and movie data taken from the we
 
 ### Run Service on Flask
 ```shell
-$ export FLASK_APP=QRCard 
+$ export FLASK_APP=Service 
 # to run in developer mode
 $ export FLASK_ENV=development
 $ flask run
 ```
 Or on Windows cmd:
 ```shell
-$ set FLASK_APP=QRCard
+$ set FLASK_APP=Service
 # to run in developer mode
 $ set FLASK_ENV=development
 $ flask run
